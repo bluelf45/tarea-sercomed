@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    ports:
+      - "8000:8000"  # permite usar `npm run dev` (Vite en :5173) contra este backend
+    environment:
+      CORS_ORIGINS: '["http://localhost:8080"]'
+    volumes:
+      - ./backend/knowledge:/app/knowledge:ro
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
